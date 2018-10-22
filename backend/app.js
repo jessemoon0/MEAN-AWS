@@ -2,10 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const Post = require('./models/post');
+const postsRoutes = require('./routes/posts');
+
 const app = express();
 
-mongoose.connect('mongodb+srv://jessie:SqxwAz6zHY9QlCTI@udemy-mean-app-44qey.mongodb.net/test?retryWrites=true')
+mongoose.connect('mongodb+srv://jessie:SqxwAz6zHY9QlCTI@udemy-mean-app-44qey.mongodb.net/test?retryWrites=true', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to DB!!!');
   })
@@ -25,37 +26,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/posts', (req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then((createdPost) => {
-    console.log(createdPost);
-    res.status(201).json({
-      message: 'Post added successfully',
-      postId: createdPost._id
-    });
-  });
-});
-
-app.get('/api/posts', (req, res, next) => {
-  Post.find()
-    .then(documents => {
-      res.status(200).json({
-        message: 'Posts fetched successfully',
-        posts: documents
-      });
-    });
-});
-
-app.delete('/api/posts/:id', (req, res, next) => {
-  Post.deleteOne({_id: req.params.id})
-    .then((result) => {
-      console.log('Deleted from Backend!');
-      console.log(result);
-      res.status(200).json({message: 'Post Deleted!'})
-    });
-});
+app.use('/api/posts', postsRoutes);
 
 module.exports = app;
