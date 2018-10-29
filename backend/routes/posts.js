@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
+// Mongoose schema
 const Post = require('../models/post');
 
 const MIME_TYPE_MAP = {
@@ -49,11 +50,24 @@ router.post('', multer({storage}).single('image'), (req, res, next) => {
 });
 
 router.get('', (req, res, next) => {
-  Post.find()
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts = [];
+  if (pageSize && currentPage) {
+    // Inefficient for really large DBs
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+  postQuery
     .then(documents => {
+      fetchedPosts = documents;
+      return Post.countDocuments()
+    })
+    .then(count => {
       res.status(200).json({
         message: 'Posts fetched successfully',
-        posts: documents
+        posts: fetchedPosts,
+        maxPosts: count
       });
     });
 });

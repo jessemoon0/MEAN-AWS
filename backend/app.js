@@ -18,6 +18,7 @@ mongoose.connect('mongodb+srv://jessie:SqxwAz6zHY9QlCTI@udemy-mean-app-44qey.mon
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// Make images folder available
 app.use('/images', express.static(path.join('backend/images')));
 
 // CORS
