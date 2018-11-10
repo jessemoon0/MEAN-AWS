@@ -15,7 +15,7 @@ export const mimeType =
     const fileReader$ = Observable.create((observer: Observer<{ [key: string]: any }>) => {
       fileReader.addEventListener('loadend', () => {
 
-        const unsignedEightBitIntArray = new Uint8Array(fileReader.result).subarray(0, 4);
+        const unsignedEightBitIntArray = new Uint8Array(fileReader.result as ArrayBuffer).subarray(0, 4);
         let header = '';
         let isValid = false;
 

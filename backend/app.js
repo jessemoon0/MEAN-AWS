@@ -8,6 +8,9 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
+// Remove deprecation
+mongoose.set('useCreateIndex', true);
+
 mongoose.connect('mongodb+srv://jessie:SqxwAz6zHY9QlCTI@udemy-mean-app-44qey.mongodb.net/test?retryWrites=true', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to DB!!!');
