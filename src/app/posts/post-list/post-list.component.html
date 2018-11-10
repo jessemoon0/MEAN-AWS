@@ -1,4 +1,5 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
+<h3>Showing {{postsPerPage}} items per page...</h3>
 <mat-accordion multi="true" *ngIf="posts.length && !isLoading">
   <mat-expansion-panel *ngFor="let post of posts">
 
