@@ -19,7 +19,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
-import { JoinComponent } from './auth/signup/join.component';
+import { JoinComponent } from './auth/join/join.component';
 
 @NgModule({
   declarations: [

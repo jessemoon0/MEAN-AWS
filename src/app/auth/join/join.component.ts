@@ -3,21 +3,23 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-join',
+  templateUrl: './join.component.html',
+  styleUrls: ['./join.component.css']
 })
-export class LoginComponent {
+export class JoinComponent {
 
   isLoading = false;
 
   constructor(private authService: AuthService) {}
 
-  onLogin(form: NgForm) {
+  onJoin(form: NgForm) {
+    console.log('Join');
+    console.log(form.valid);
     if (form.invalid) {
       return;
     } else {
-      this.authService.login(form.value.email, form.value.password);
+      this.authService.createUser(form.value.email, form.value.password);
     }
   }
 
