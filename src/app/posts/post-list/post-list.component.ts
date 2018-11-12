@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { IPost } from '../post.model';
 import { PostsService } from '../posts.service';
 import { PageEvent } from '@angular/material';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-post-list',
@@ -16,6 +17,9 @@ export class PostListComponent implements OnInit, OnDestroy {
   //   { title: "Second IPost", content: "This is the second post's content" },
   //   { title: "Third IPost", content: "This is the third post's content" }
   // ];
+  private postsSub: Subscription;
+  private authListenerSub: Subscription;
+
   posts: IPost[] = [];
   isLoading = false;
 
@@ -25,19 +29,30 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   currentPage = 1;
 
-  private postsSub: Subscription;
+  userIsAuthenticated = false;
 
-  constructor(public postsService: PostsService) {}
+  constructor(public postsService: PostsService, private authService: AuthService) {}
 
   ngOnInit() {
     this.isLoading = true;
+
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
+
     this.postsSub = this.postsService.getPostUpdateListener()
       .subscribe((postsData: {posts: IPost[], postCount: number}) => {
         this.isLoading = false;
         this.totalPosts = postsData.postCount;
         this.posts = postsData.posts;
       });
+
+    this.userIsAuthenticated = this.authService.getIsAuthenticated();
+
+    this.authListenerSub = this.authService.getAuthStatusListener()
+      .subscribe(
+        (isAuthenticated) => {
+          this.userIsAuthenticated = isAuthenticated;
+        }
+      );
   }
 
   ngOnDestroy() {
