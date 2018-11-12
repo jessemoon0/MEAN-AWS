@@ -69,4 +69,8 @@ export class AuthService {
     this.authStatusListener.next(false);
     this.router.navigate(['/']);
   }
+
+  private saveAuthData(token: string, expirationDate: Date) {
+    
+  }
 }
