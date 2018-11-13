@@ -41,6 +41,9 @@ export class AuthService {
         (result) => {
           this.login(email, password);
           this.router.navigate(['/']);
+        },
+        (error) => {
+          this.authStatusListener.next(false);
         }
       );
   }
@@ -71,6 +74,9 @@ export class AuthService {
             this.router.navigate(['/']);
           }
 
+        },
+        (error) => {
+          this.authStatusListener.next(false);
         }
       );
   }

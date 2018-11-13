@@ -44,18 +44,25 @@ router.post(
     creator: req.userData.userId
   });
 
-  post.save().then((createdPost) => {
-    console.log(createdPost);
-    res.status(201).json({
-      message: 'Post added successfully',
-      post: {
-        id: createdPost._id,
-        title: createdPost.title,
-        content: createdPost.content,
-        imagePath: createdPost.imagePath
-      }
+  post.save()
+    .then((createdPost) => {
+      console.log(createdPost);
+      res.status(201).json({
+        message: 'Post added successfully',
+        post: {
+          id: createdPost._id,
+          title: createdPost.title,
+          content: createdPost.content,
+          imagePath: createdPost.imagePath
+        }
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: 'Creating a post failed',
+        error
+      });
     });
-  });
 });
 
 router.get('', (req, res, next) => {
@@ -78,7 +85,13 @@ router.get('', (req, res, next) => {
         posts: fetchedPosts,
         maxPosts: count
       });
-    });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: 'Fetching posts failed',
+        error
+      });
+    });;
 });
 
 router.get('/:id', (req, res, next) => {
@@ -89,6 +102,12 @@ router.get('/:id', (req, res, next) => {
       } else {
         res.status(404).json({message: 'Post not found'});
       }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: 'Fetching the desired post failed',
+        error
+      });
     });
 });
 
@@ -120,7 +139,13 @@ router.put(
         res.status(401).json({ message: 'You are not authorized to modify this post' })
       }
 
-  });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: 'Couldn\'t update post',
+        error
+      });
+    });
 
 });
 
@@ -137,7 +162,13 @@ router.delete(
       } else {
         res.status(401).json({ message: 'You are not authorized to delete this post' })
       }
-    });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: 'Deleting the post failed',
+        error
+      });
+    });;
 });
 
 module.exports = router;

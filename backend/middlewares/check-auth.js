@@ -12,6 +12,6 @@ module.exports = (req, res, next) => {
     next();
   } catch (error) {
     // We don't have a token and we are not authenticated.
-    res.status(401).json({ message:  'Auth Failed!' });
+    res.status(401).json({ message:  'Invalid token!' });
   }
 };

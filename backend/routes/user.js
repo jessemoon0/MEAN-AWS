@@ -22,7 +22,7 @@ router.post('/join', (req, res, next) => {
         // If user already exists
         .catch(err => {
           res.status(500).json({
-            message: 'An error has occurred',
+            message: 'User already exists',
             error: err
           })
         });
