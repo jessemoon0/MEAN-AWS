@@ -40,8 +40,10 @@ router.post(
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
-    imagePath: `${serverUrl}/images/${req.file.filename}`
+    imagePath: `${serverUrl}/images/${req.file.filename}`,
+    creator: req.userData.userId
   });
+
   post.save().then((createdPost) => {
     console.log(createdPost);
     res.status(201).json({
@@ -105,23 +107,36 @@ router.put(
     _id: req.body.id,
     title: req.body.title,
     content: req.body.content,
-    imagePath
+    imagePath,
+    creator: req.userData.userId
   });
-  Post.updateOne({_id: req.params.id}, updatedPost).then((response) => {
-    console.log(response);
-    res.status(200).json({message: 'Updated successfully!'});
+
+  Post.updateOne({_id: req.params.id, creator: req.userData.userId}, updatedPost)
+    .then((result) => {
+      // If the field has been really modified, meaning is the right user.
+      if (result.nModified > 0) {
+        res.status(200).json({ message: 'Updated successfully!' });
+      } else {
+        res.status(401).json({ message: 'You are not authorized to modify this post' })
+      }
+
   });
+
 });
 
 router.delete(
   '/:id',
   checkAuth,
   (req, res, next) => {
-  Post.deleteOne({_id: req.params.id})
+  Post.deleteOne({_id: req.params.id, creator: req.userData.userId})
     .then((result) => {
-      console.log('Deleted from Backend!');
-      console.log(result);
-      res.status(200).json({message: 'Post Deleted!'})
+      // If the user is the creator of the post, he/she can delete it.
+      if (result.n > 0) {
+        console.log('Deleted from Backend!');
+        res.status(200).json({ message: 'Deleted from Backend!' });
+      } else {
+        res.status(401).json({ message: 'You are not authorized to delete this post' })
+      }
     });
 });
 
