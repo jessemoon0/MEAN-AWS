@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
   try {
     // We want the token part after the "Bearer" word, only the token part.
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'secret_this_should_be_longer_password');
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     req.userData = {
       email: decodedToken.email,
       userId: decodedToken.userId

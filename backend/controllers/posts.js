@@ -97,7 +97,7 @@ exports.updatePostById = (req, res, next) => {
   Post.updateOne({_id: req.params.id, creator: req.userData.userId}, updatedPost)
     .then((result) => {
       // If the field has been really modified, meaning is the right user.
-      if (result.nModified > 0) {
+      if (result.n > 0) {
         res.status(200).json({ message: 'Updated successfully!' });
       } else {
         res.status(401).json({ message: 'You are not authorized to modify this post' })

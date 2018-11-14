@@ -5,12 +5,13 @@ import { IPost } from './post.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
   private posts: IPost[] = [];
   private postsUpdated = new Subject<{posts: IPost[], postCount: number}>();
-  private apiUrl = 'http://localhost:3000/api/posts';
+  private apiUrl = `${environment.apiURL}/posts`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
