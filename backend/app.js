@@ -22,8 +22,8 @@ mongoose.connect(`mongodb+srv://jessie:${process.env.MONGO_ATLAS_PASSWORD}@udemy
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// Make images folder available
-app.use('/images', express.static(path.join('backend/images')));
+// Make images folder available.
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // CORS
 app.use((req, res, next) => {
